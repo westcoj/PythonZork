@@ -22,6 +22,8 @@ def main():
             print ("You Have Died")
             break
         
+    input("Type anything to quit")
+    
     
     
     

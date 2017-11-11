@@ -17,7 +17,7 @@ class Player(object):
         '''
         self.__health = random.randint(300,350)
         self.__inventory = [Kisses()]
-        self.__attack = 100#random.randint(10,20)
+        self.__attack = random.randint(10,20)
         for i in range(0,9):
             num = random.randint(0,2)
             if num==0:

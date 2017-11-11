@@ -41,7 +41,7 @@ class Neighborhood:
             for j in range(3):
                 descVal = random.randint(0,9)
                 tasker = random.randint(0,5)
-                if tasker == 4 or tasker ==5:
+                if tasker >= 3:
                     self.__grid[i].append(House(self.houseDesc[descVal]))
                 else:
                     self.__grid[i].append(Tile(self.tileDesc[descVal]))
