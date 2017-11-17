@@ -1,4 +1,5 @@
 #! /usr/bin/env python
+"""textrect Module provided by David Clark (da_clark at shaw.ca), used for textbox management. http://www.pygame.org/pcr/text_rect/index.php"""
 
 class TextRectException:
     def __init__(self, message = None):
