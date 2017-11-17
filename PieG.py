@@ -47,6 +47,36 @@ class gameGui:
         else:
             self.__screen.blit(imageTileP, (self.__posX, self.__posY))
             
+    def reDraw(self):
+        self.__screen.fill((255, 255, 255))
+        z = 0;
+        t = 0;
+        for x in self.__game.getMap().getGrid():
+            for y in x:
+                if(self.__game.getLoc()==y):
+                    if isinstance(y, House):
+                        self.__screen.blit(imageHouseP, (t, z))
+                        t = t + 155
+                    else:
+                        self.__screen.blit(imageTileP, (t, z))
+                        t = t + 155
+                if isinstance(y, House):
+                    self.__screen.blit(imageHouse, (t, z))
+                    t = t + 155
+                else:
+                    self.__screen.blit(imageTile, (t, z))
+                    t = t + 155
+            z = z + 155
+            t = 0
+        
+        self.__posX = 0
+        self.__posY = 0
+        self.__textBox = pygame.draw.rect(self.__screen, (255, 255, 255), (500, 10, 600, 400), 2)
+        if isinstance(self.__game.getLoc(), House):
+            self.__screen.blit(imageHouseP, (self.__posX, self.__posY))
+        else:
+            self.__screen.blit(imageTileP, (self.__posX, self.__posY))
+            
     def runGame(self):
         self.createScreen()
         pygame.init()
@@ -54,30 +84,31 @@ class gameGui:
         clock = pygame.time.Clock()
         pygame.display.flip()
         pygame.event.clear()
-        self.__helpText = """Use arrows to move, B for Bag, S for Stats, Z for Hershey's Kisses, X For Nerds, C for Sour Straws, and V for Chocolate Bars. Press H to see this again, W to see where you are, and M for a list of monsters."""
+        self.__endText = "Game Over"
+        self.__helpText = """Use arrows to move, B for Bag, S for Stats, Z for Hershey's Kisses, X For Nerds, C for Sour Straws, and V for Chocolate Bars. Press H to see this again, Q to quit, W to see where you are, and M for a list of monsters."""
         rendered_text = textrect.render_textrect(self.__helpText, self.__font, self.__textBox, (255, 255, 255), (0, 0, 0), 0)
         if rendered_text:
             self.__screen.blit(rendered_text, self.__textBox.topleft)
         while pygame.event.wait().type != pygame.locals.QUIT:
-            clock.tick(5)
+            clock.tick(60)
             key = pygame.key.get_pressed()
             self.getInput(key)
             pygame.display.flip()
             pygame.event.clear()
-            clock.tick(5)
-            if(self.__game.deadGuy()):
-                rendered_text = textrect.render_textrect("You've been defeated, bad luck mate", self.__font, self.__textBox, (255, 255, 255), (0, 0, 0), 0)
-                if rendered_text:
-                    self.__screen.blit(rendered_text, self.__textBox.topleft)
-                break;
-            if(self.__game.gameOver()):
-                rendered_text = textrect.render_textrect("You've killed all the monsters, good job", self.__font, self.__textBox, (255, 255, 255), (0, 0, 0), 0)
-                if rendered_text:
-                    self.__screen.blit(rendered_text, self.__textBox.topleft)
-                break;
-
-     
-     
+            clock.tick(60)
+            if(self.__game.deadGuy() or self.__game.gameOver()):
+                if(self.__game.deadGuy()):
+                    self.__endText = "You've been defeated, bad luck mate, press Q to quit"
+                    rendered_text = textrect.render_textrect(self.__endText, self.__font, self.__textBox, (255, 255, 255), (0, 0, 0), 0)
+                    if rendered_text:
+                        self.__screen.blit(rendered_text, self.__textBox.topleft)
+                    
+                if(self.__game.gameOver()):
+                    self.__endText = "You've killed all the monsters, good job. Press Q to quit"
+                    rendered_text = textrect.render_textrect(self.__endText, self.__font, self.__textBox, (255, 255, 255), (0, 0, 0), 0)
+                    if rendered_text:
+                        self.__screen.blit(rendered_text, self.__textBox.topleft)
+        
      
     def getInput(self, key):
         oldLoc = self.__game.getLoc()
@@ -210,6 +241,11 @@ class gameGui:
             rendered_text = textrect.render_textrect(self.__game.retMsg(), self.__font, self.__textBox, (255, 255, 255), (0, 0, 0), 0)
             if rendered_text:
                 self.__screen.blit(rendered_text, self.__textBox.topleft)
+                
+        if key[pygame.K_q]:
+            pygame.display.quit()
+            pygame.quit()
+            quit()
         
 
 
