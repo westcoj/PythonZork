@@ -1,22 +1,26 @@
-'''
-Created on Nov 8, 2017
-
-@author: Cody
-'''
+"""
+ * The following module sets up the Game class which contains all info needed to run
+ * a game. Interprets user input on the console as strings and processes them
+ * according to the game.
+ *
+ * @author Cody West
+ * @version Zork Clone
+ * @date 11/08/2017
+"""
 from Tile import *
 from Player import *
 from pip._vendor.distlib.compat import raw_input
 from builtins import str
 class Game:
     '''
-    classdocs
+    Sets up the neihborhood and player for the game. Interprets user input on the console as strings and processes them
+    according to the game.
     '''
 
 
     def __init__(self):
-        '''
-        Constructor
-        '''
+        """Default constructer for Game, sets up neighborhood and player"""
+        
         self.__map = Neighborhood()
         self.__player = Player()
         print("Welcome to the Neighborhood")
@@ -27,12 +31,28 @@ class Game:
         
 
     def getInput(self):
+        """Function for getting user input in non-graphical game
+
+        Returns:
+            Returns input from user
+
+        """
         print("Type in a Command")
         msg = raw_input()
         return msg
     
     
     def playerMove(self, dirT):
+        """Moves player in neighborhood in a specified direction
+
+        Args:
+            dirT: Cardinal direction to move
+
+        Returns:
+            True if the move is successful
+            False if the move is illegal
+
+        """
         x=0
         y=0
         if dirT == "North":
@@ -92,19 +112,46 @@ class Game:
             
             
     def getMsg(self):
+        """prints current game message for non graphical game
+        """
         print (self.__currMsg)
         
     def retMsg(self):
+        """Gets game message for graphical game
+
+        Returns:
+            The game's current message
+
+        """
         return self.__currMsg
         
     def getMap(self):
+        """Gets game's map of the neighbohood
+
+        Returns:
+            The game's neighborhood
+
+        """
         return self.__map
     
     def getLoc(self):
+        """Gets player's spot in neighborhood
+
+        Returns:
+            Player's spot in neighborhood
+
+        """
         return self.__currSpot
         
         
     def command(self, msg):
+        """Interprets user's input for game and what input does
+
+        Args:
+            msg: Input from user
+
+
+        """
         words = []
         words = msg.split()
         if len(words) == 0:
@@ -159,6 +206,12 @@ class Game:
         words = []
                 
     def monsterAttack(self):
+        """Function allowing monsters in current house to attack player
+
+        Returns:
+            Nothing, or string of attacking monsters
+
+        """
         if isinstance(self.__currSpot, House):
             if(self.__currSpot.clear()):
                 return
@@ -171,6 +224,15 @@ class Game:
         
                 
     def playerAttack(self,weapon):
+        """Allows player to attack monsters in a house
+
+        Args:
+            weapon: Type of weapon to attack with
+
+        Returns:
+            Nothing on failed attack
+
+        """
         if self.__player.checkItems(weapon):
             wep = self.__player.getItem(weapon)
             if isinstance(self.__currSpot, House):
@@ -194,6 +256,14 @@ class Game:
             self.__currMsg = "You don't have that"
             
     def gameOver(self):
+        """Checks to see if all houses are cleared
+
+
+        Returns:
+            True if monsters are dead
+            False if they are not
+
+        """
         for x in self.__map.getGrid():
             for y in x:
                 if isinstance(y, House):
@@ -203,6 +273,14 @@ class Game:
         return True  
     
     def deadGuy(self):
+        """Checks to see if player is dead
+
+
+        Returns:
+            True if player is dead
+            False if they are not
+
+        """
         if(self.__player.getHP() <= 0):
             return True
         return False

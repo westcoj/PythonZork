@@ -1,8 +1,12 @@
-'''
-Created on Nov 16, 2017
-
-@author: Cody
-'''
+"""
+ * The following module sets up the gui for the game, maintaining the game state and holds the main 
+* for running the game with a GUI. Interprets key presses from user and processes them according
+* to the game
+ *
+ * @author Cody West
+ * @version Zork Clone
+ * @date 11/08/2017
+"""
 import pygame
 from pygame.locals import *
 from Tile import *
@@ -18,12 +22,20 @@ imageTileP = pygame.image.load('blankP.png')
 imageHouseP = pygame.image.load('houseP.png')
 
 class gameGui:
-    
+    '''
+    Class that builds and maintains the gui for the game.
+    '''
     def __init__(self):
+        """
+        Default constructor that sets up game
+        """
         self.__game = Game()
         
     
     def createScreen(self):
+        """
+        Creates the screen to be used by the game gui
+        """
         self.__screen = pygame.display.set_mode((1200, 800));
         self.__screen.fill((255, 255, 255))
         z = 0;
@@ -32,11 +44,11 @@ class gameGui:
             for y in x:
                 if isinstance(y, House):
                     self.__screen.blit(imageHouse, (t, z))
-                    t = t + 155
+                    t = t + 80
                 else:
                     self.__screen.blit(imageTile, (t, z))
-                    t = t + 155
-            z = z + 155
+                    t = t + 80
+            z = z + 80
             t = 0
         
         self.__posX = 0
@@ -48,6 +60,9 @@ class gameGui:
             self.__screen.blit(imageTileP, (self.__posX, self.__posY))
             
     def reDraw(self):
+        """
+        Redraws the game gui when the player moves
+        """
         self.__screen.fill((255, 255, 255))
         z = 0;
         t = 0;
@@ -56,21 +71,24 @@ class gameGui:
                 if(self.__game.getLoc()==y):
                     if isinstance(y, House):
                         self.__screen.blit(imageHouseP, (t, z))
-                        t = t + 155
+                        t = t + 80
                     else:
                         self.__screen.blit(imageTileP, (t, z))
-                        t = t + 155
+                        t = t + 80
                 else:
                     if isinstance(y, House):
                         self.__screen.blit(imageHouse, (t, z))
-                        t = t + 155
+                        t = t + 80
                     else:
                         self.__screen.blit(imageTile, (t, z))
-                        t = t + 155
-            z = z + 155
+                        t = t + 80
+            z = z + 80
             t = 0
             
     def runGame(self):
+        """
+        Method that runs the game until player dies or all houses are cleared. Passes key presses to other method
+        """
         self.createScreen()
         pygame.init()
         self.__font = pygame.font.Font(None, 24)
@@ -104,6 +122,9 @@ class gameGui:
         
      
     def getInput(self, key):
+        """
+        Processes user key presses in game depending on key. Updates text box
+        """
         oldLoc = self.__game.getLoc()
         if key[pygame.K_UP]:
             valid = self.__game.playerMove("North")
@@ -112,8 +133,7 @@ class gameGui:
             rendered_text = textrect.render_textrect(self.__game.retMsg(), self.__font, self.__textBox, (255, 255, 255), (0, 0, 0), 0)
             if rendered_text:
                 self.__screen.blit(rendered_text, self.__textBox.topleft)
-            
-                 
+              
         if key[pygame.K_DOWN]:
             valid = self.__game.playerMove("South")
             self.__game.getMsg()
@@ -121,8 +141,7 @@ class gameGui:
             rendered_text = textrect.render_textrect(self.__game.retMsg(), self.__font, self.__textBox, (255, 255, 255), (0, 0, 0), 0)
             if rendered_text:
                 self.__screen.blit(rendered_text, self.__textBox.topleft)
- 
-                    
+        
         if key[pygame.K_LEFT]:
             valid = self.__game.playerMove("West")
             self.__game.getMsg()
@@ -189,7 +208,6 @@ class gameGui:
             rendered_text = textrect.render_textrect(self.__game.retMsg(), self.__font, self.__textBox, (255, 255, 255), (0, 0, 0), 0)
             if rendered_text:
                 self.__screen.blit(rendered_text, self.__textBox.topleft)
-                
         if key[pygame.K_q]:
             pygame.display.quit()
             pygame.quit()
@@ -198,8 +216,6 @@ class gameGui:
 
 
 
-
-    # CODE THAT IS NOT MINE
     
 if __name__ == '__main__':
     newGame = gameGui()

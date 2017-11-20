@@ -1,18 +1,25 @@
-'''
-Created on Nov 8, 2017
-
-@author: Cody
-'''
+"""
+ * The following module contains the neighborhood class which holds a map of house and
+ * tile classes for the player to traverse through
+ *
+ * @author Cody West
+ * @version Zork Clone
+ * @date 11/08/2017
+"""
 from random import random
 from Monster import *
 import inspect
 from Observer import *
 class Neighborhood:
     '''
-    docs
+    Class that builds game map from houses and blank tiles based on random numbers, 
+    and assigns various descriptions to them.
     '''
     
     def __init__(self):
+        """
+        Constructer that sets up neighborhood in 2-D list with various descriptions
+        """
         self.houseDesc = []
         self.tileDesc = []
         self.houseDesc.append("A looming two story house")
@@ -35,10 +42,10 @@ class Neighborhood:
         self.tileDesc.append("This house has already been cleared by someone much better than you")
         self.tileDesc.append("A woman approaches you, demanding you listen to her new vinyl.")
         self.tileDesc.append("IndexError: Variable out of bounds: ... Just kidding, empty tile")
-        self.__grid = [[0 for x in range(5)] for y in range(4)]
-        for i in range(4):
+        self.__grid = [[0 for x in range(5)] for y in range(5)]
+        for i in range(5):
             self.__grid[i] = []
-            for j in range(3):
+            for j in range(5):
                 descVal = random.randint(0,9)
                 tasker = random.randint(0,5)
                 if tasker >= 3:
@@ -47,6 +54,9 @@ class Neighborhood:
                     self.__grid[i].append(Tile(self.tileDesc[descVal]))
                     
     def print(self):
+        """
+        Prints the monsters in the tile if it is a house
+        """
         for x in self.__grid:
             for y in x:
                 print (y.description)
@@ -55,6 +65,12 @@ class Neighborhood:
                         print(l)
                         
     def getGrid(self):
+        """Gets the neighborhood map of tiles
+
+        Returns:
+            The neighborhood map
+
+        """
         return self.__grid
             
                 
@@ -62,24 +78,39 @@ class Neighborhood:
     
 class Tile(Observer):
     '''
-    classdocs
+    Blank tile for game map and super for houses
     '''
     def __init__(self, desc):
         '''
-        Constructor
+        Constructor that adds a description to the tile
+        
+        Args:
+            desc: Description of house
         '''
         self.__description = desc;
         #self.__monsterList= [];
         
     def getDesc(self):
+        """Gets tile's description
+
+        Returns:
+            Description of tile
+
+        """
         return self.__description
 
 class House(Tile):
     '''
-    classdocs
+    House for game map that contains a list of monsters and observes them until they perish.
     '''
     
     def __init__(self,desc):
+        """
+        Constructer that sets up monsters in house
+        
+        Args:
+            desc: Description of house
+        """
         super().__init__(desc)
         self.__monsterList = []
         iVal = random.randint(1,10)
@@ -100,6 +131,12 @@ class House(Tile):
             y.add_observer(self)
                 
     def clear(self):
+        """Checks to see if any monsters are left in house
+
+        Returns:
+            True if all are dead, false if not
+
+        """
         for x in self.__monsterList:
             if not isinstance(x,Person):
                 return False
@@ -107,6 +144,9 @@ class House(Tile):
         return True
     
     def update(self,health, monster):
+        """
+        Updates house monster list if a monster dies
+        """
         if health <= 0:
             print(monster.getName() + " has died")
             inX = self.__monsterList.index(monster)
@@ -114,6 +154,12 @@ class House(Tile):
             self.__monsterList.insert(inX, Person())
             
     def getList(self):
+        """Gets house's list of monsters
+
+        Returns:
+            House's list of monsters
+
+        """
         return self.__monsterList
             
 

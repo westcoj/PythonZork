@@ -1,8 +1,12 @@
-'''
-Created on Nov 8, 2017
-
-@author: Cody
-'''
+"""
+ * The following module runs the non GUI version of the game
+ ***********************************
+ * FOR GUI, RUN PieG.py
+ * *********************************
+ * @author Cody West
+ * @version Zork Clone
+ * @date 11/08/2017
+"""
 #!/usr/bin/env python
 from Game import *
 
